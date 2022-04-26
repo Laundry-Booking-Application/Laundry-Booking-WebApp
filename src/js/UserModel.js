@@ -1,3 +1,5 @@
+import LaundryData from "./laundryData";
+
 /**
  * Responsible for handling all the information about the user credentials.
  */
@@ -19,7 +21,28 @@ class UserModel {
    * @param {string} password The entered password by the user.
    */
     loginUser(username, password) {
-        this.populateUserModelData(true, username, 1);
+        LaundryData.loginUser(username, password)
+            .then((result) => {
+                if (result.ok) {
+                    result.json().then((data) => {
+                        let userLoggedIn = true;
+                        let currentUsername = data.success.username;
+                        let currentPrivilege = data.success.privilegeID;
+                        this.populateUserModelData(userLoggedIn, currentUsername, currentPrivilege);
+                    });
+                } else {
+                    result.json().then((data) => {
+                        // this.handleErrorMessages(result.status, data.error);
+                    });
+                }
+            })
+            .catch((error) => {
+                //   if (error instanceof TypeError) {
+                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                //   } else {
+                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                //   }
+            });
     }
 
     /**
@@ -39,8 +62,21 @@ class UserModel {
    * log out the user from the website. 
    */
     logoutUser() {
-        this.emptyUserModelData();
-        this.loginStatus = false;
+        LaundryData.logoutUser().then((result) => {
+                if (result.ok) {
+                    result.json().then((data) => {
+                        this.emptyUserModelData();
+                        this.loginStatus = false;
+                    });
+                }
+            })
+            .catch((error) => {
+                // if (error instanceof TypeError) {
+                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                // } else {
+                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                // }
+            });
     }
 
     /**
