@@ -9,13 +9,14 @@ import NavigationLogoutView from '../views/navigationLogoutView'
  * @returns {NavigationLogoutView} An element to logout the user.
  *                                 The element function changes depending on the login status.
  */
-function NavigationLogout({userModel, goToHomePageHref}) {
+function NavigationLogout({userModel, goToHomePageHref, bookingScheduleHref}) {
     const modelUsername = useModelProp(userModel, 'username');
 
     return React.createElement(NavigationLogoutView, {
         username: modelUsername,
         handleLogout: () => userModel.logoutUser(),
-        navHomePageHref: goToHomePageHref
+        navHomePageHref: goToHomePageHref,
+        bookingScheduleHref: bookingScheduleHref
     });
 }
 

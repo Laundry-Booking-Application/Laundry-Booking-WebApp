@@ -14,7 +14,7 @@ import {toast} from 'react-toastify';
  */
 function Navigation({userModel, homepageHref, children}) {
     const loginStatus = useModelProp(userModel, 'loginStatus');
-    const [navigationLoginComponent, navigationLogoutComponent] = children;
+    const [navigationLoginComponent, navigationLogoutComponent, navigationOptionsComponent] = children;
     const errorDataUser = useModelProp(userModel, 'errorData');
     const [toggleState, setToggleState] = React.useState(false);
     
@@ -35,7 +35,7 @@ function Navigation({userModel, homepageHref, children}) {
 
     if (loginStatus) {
         return React.createElement(NavigationView, {
-            component: navigationLogoutComponent,
+            component: [navigationOptionsComponent, navigationLogoutComponent],
             toggleState: toggleState,
             setToggleState: () => setToggleState(!toggleState),
             handleClose: () => setToggleState(false),
@@ -44,7 +44,7 @@ function Navigation({userModel, homepageHref, children}) {
     }
 
     return React.createElement(NavigationView, {
-        component: [navigationLoginComponent],
+        component: navigationLoginComponent,
         toggleState: toggleState,
         setToggleState: () => setToggleState(!toggleState),
         handleClose: () => setToggleState(false),
