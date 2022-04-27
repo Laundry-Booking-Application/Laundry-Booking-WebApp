@@ -4,17 +4,21 @@ import ShowView from './js/presenters/viewManager';
 import Navigation from './js/presenters/navigation';
 import NavigationLogin from './js/presenters/navigationLogin';
 import NavigationLogout from './js/presenters/navigationLogout';
+import NavigationOptions from './js/presenters/navigationOptions';
+import BookingSchedule from './js/presenters/bookingSchedule';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 
 const homepageHref = '#home';
+const bookingScheduleHref = "#bookingSchedule";
 
-function App({userModel}) {
+function App({userModel, bookingModel}) {
   return (
     <div className='App'>
       <Navigation userModel={userModel} homepageHref={homepageHref}>
         <NavigationLogin userModel={userModel}/>
-        <NavigationLogout userModel={userModel} goToHomePageHref={homepageHref}/>
+        <NavigationLogout userModel={userModel} goToHomePageHref={homepageHref} bookingScheduleHref={bookingScheduleHref}/>
+        <NavigationOptions userModel={userModel} bookingScheduleHref={bookingScheduleHref}/>
       </Navigation>
 
       <ShowView hash={homepageHref}>
@@ -22,7 +26,13 @@ function App({userModel}) {
           <Homepage/>
         </div>
       </ShowView>
-      
+
+      <ShowView hash={bookingScheduleHref}>
+        <div>
+          <BookingSchedule userModel={userModel} bookingModel={bookingModel}/>
+        </div>
+      </ShowView>
+  
       <ToastContainer/>
     </div>
   );
@@ -32,7 +42,7 @@ function App({userModel}) {
  * Routes into the home page incase of invalid hash value was set.
  */
 function defaultRoute() {
-  const appRoutes = [homepageHref];
+  const appRoutes = [homepageHref, bookingScheduleHref];
   if (!appRoutes.find(knownRoute => knownRoute === window.location.hash)) {
     window.location.hash = homepageHref;
   }

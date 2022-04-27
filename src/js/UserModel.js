@@ -9,10 +9,11 @@ class UserModel {
      */
     constructor() {
         this.subscribers = [];
-        this.loginStatus = null;
+        this.loginStatus = false;
         this.username = null;
         this.privilege = null;
         this.errorData = null;
+        this.checkLogin();
     }
 
     /**
@@ -46,11 +47,56 @@ class UserModel {
     }
 
     /**
-   * Set the user information in their proper place.
-   * @param {boolean} loginStatus The status to indicate if the user is logged in or not.
-   * @param {string} username The username for the logged in user.
-   * @param {number} privilege The privilege that the logged in user has.
+   * log out the user from the website. 
    */
+    logoutUser() {
+        LaundryData.logoutUser().then((result) => {
+            if (result.ok) {
+                result.json().then((data) => {
+                    this.emptyUserModelData();
+                });
+            }
+        })
+        .catch((error) => {
+            // if (error instanceof TypeError) {
+            //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+            // } else {
+            //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+            // }
+        });
+    }
+
+    /**
+   * Check if the user have already logged in before and have a valid cookie without logging out.
+   */
+    checkLogin() {
+        LaundryData.checkLogin()
+            .then((result) => {
+                if (result.ok) {
+                    result.json().then((data) => {
+                        let userLoginStatus = true;
+                        let currentUsername = data.success.username;
+                        let currentPrivilege = data.success.privilegeID;
+                        this.populateUserModelData(userLoginStatus, currentUsername, currentPrivilege);
+                    });
+                }
+                else {
+                    this.emptyUserModelData();
+                }
+            })
+            .catch((error) => {
+                //if (error instanceof TypeError) {
+                //    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                //}
+            });
+    }
+
+    /**
+       * Set the user information in their proper place.
+       * @param {boolean} loginStatus The status to indicate if the user is logged in or not.
+       * @param {string} username The username for the logged in user.
+       * @param {number} privilege The privilege that the logged in user has.
+       */
     populateUserModelData(loginStatus, username, privilege) {
         this.loginStatus = loginStatus;
         this.username = username;
@@ -59,31 +105,10 @@ class UserModel {
     }
 
     /**
-   * log out the user from the website. 
-   */
-    logoutUser() {
-        LaundryData.logoutUser().then((result) => {
-                if (result.ok) {
-                    result.json().then((data) => {
-                        this.emptyUserModelData();
-                        this.loginStatus = false;
-                    });
-                }
-            })
-            .catch((error) => {
-                // if (error instanceof TypeError) {
-                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
-                // } else {
-                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
-                // }
-            });
-    }
-
-    /**
    * Reset the information about the logged in user.
    */
     emptyUserModelData() {
-        this.loginStatus = null;
+        this.loginStatus = false;
         this.username = null;
         this.privilege = null;
         this.errorData = null;

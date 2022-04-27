@@ -295,7 +295,7 @@ const LaundryData = {
     /**
      * Fetches the laundry passes' schedule for the specified week.
      * @param {string} week The requested week to get the laundry passes' schedule for.
-     *                          Accepted values are -1, 0 and 1 for previous, current and next week respectively.
+     *                      Accepted values are -1, 0 and 1 for previous, current and next week respectively.
      * @returns {Response} The response received from the get resident passes endpoint.
      */
     getResidentPasses(week) {
@@ -320,7 +320,7 @@ const LaundryData = {
      * Fetches the passes' schedule for the specified week including the usernames related to the bookings.
      * This endpoint is only accessible by administrators.
      * @param {string} week The requested week to get the laundry passes' schedule for.
-     *                          Accepted values are -1, 0 and 1 for previous, current and next week respectively.
+     *                      This parameter is relative to the current week, e.g. -2 is two weeks before the current week.
      * @returns {Response} The response received from the get passes endpoint.
      */
     getPasses(week) {
