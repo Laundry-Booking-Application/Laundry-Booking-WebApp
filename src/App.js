@@ -4,6 +4,8 @@ import ShowView from './js/presenters/viewManager';
 import Navigation from './js/presenters/navigation';
 import NavigationLogin from './js/presenters/navigationLogin';
 import NavigationLogout from './js/presenters/navigationLogout';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 const homepageHref = '#home';
 
