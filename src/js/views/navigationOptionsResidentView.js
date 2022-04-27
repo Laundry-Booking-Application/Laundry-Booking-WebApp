@@ -1,6 +1,6 @@
 import {NavDropdown} from 'react-bootstrap';
 
-const NavigationOptionsResidentView = ({bookingScheduleHref}) =>
+const NavigationOptionsResidentView = ({bookingScheduleHref }) =>
     <>
         <NavDropdown title='Options'>
             <NavDropdown.Item  href={bookingScheduleHref}>
