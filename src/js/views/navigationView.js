@@ -11,7 +11,7 @@ const NavigationView = ({component, toggleState, setToggleState, handleClose, ho
             </Row>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls='responsive-navbar-nav' onClick={(e) => setToggleState()}/>
-        <Navbar.Collapse in={toggleState} className="justify-content-end" id='responsive-navbar-nav'>
+        <Navbar.Collapse in={toggleState} className="justify-content-end" id='responsive-navbar-nav' onClick={(e) => handleClose()}>
             <Nav className='ml-auto'>
                 <Nav.Link href={homepageHref} className='navButton mx-1' >
                     <HouseFill className='houseFill'/> Home </Nav.Link>
