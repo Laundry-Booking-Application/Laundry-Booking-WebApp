@@ -6,11 +6,13 @@ import NavigationLogin from './js/presenters/navigationLogin';
 import NavigationLogout from './js/presenters/navigationLogout';
 import NavigationOptions from './js/presenters/navigationOptions';
 import BookingSchedule from './js/presenters/bookingSchedule';
+import RegisterResident from './js/presenters/registerResident';
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from 'react-toastify';
 
 const homepageHref = '#home';
 const bookingScheduleHref = "#bookingSchedule";
+const listUsersHref = "#listUsers";
 
 function App({userModel, bookingModel}) {
   return (
@@ -18,7 +20,9 @@ function App({userModel, bookingModel}) {
       <Navigation userModel={userModel} homepageHref={homepageHref}>
         <NavigationLogin userModel={userModel}/>
         <NavigationLogout userModel={userModel} goToHomePageHref={homepageHref} bookingScheduleHref={bookingScheduleHref}/>
-        <NavigationOptions userModel={userModel} bookingScheduleHref={bookingScheduleHref}/>
+        <NavigationOptions userModel={userModel} bookingScheduleHref={bookingScheduleHref}>
+          <RegisterResident userModel={userModel}/>
+        </NavigationOptions>
       </Navigation>
 
       <ShowView hash={homepageHref}>
@@ -42,7 +46,7 @@ function App({userModel, bookingModel}) {
  * Routes into the home page incase of invalid hash value was set.
  */
 function defaultRoute() {
-  const appRoutes = [homepageHref, bookingScheduleHref];
+  const appRoutes = [homepageHref, bookingScheduleHref, listUsersHref];
   if (!appRoutes.find(knownRoute => knownRoute === window.location.hash)) {
     window.location.hash = homepageHref;
   }

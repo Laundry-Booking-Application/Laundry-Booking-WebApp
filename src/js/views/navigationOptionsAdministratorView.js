@@ -1,20 +1,19 @@
-import {NavDropdown} from 'react-bootstrap';
+import { NavDropdown } from 'react-bootstrap';
 
-const NavigationOptionsAdministratorView = ({bookingScheduleHref}) =>
+const NavigationOptionsAdministratorView = ({ bookingScheduleHref, registerResidentComponent }) =>
     <>
-        <NavDropdown title='Options'>
-            <NavDropdown.Item  href={bookingScheduleHref}>
+        <NavDropdown title='Options' variant='dark' menuVariant='dark' onClick={(e) => e.stopPropagation()}>
+            <NavDropdown.Item href={bookingScheduleHref} >
                 Booking Schedule
             </NavDropdown.Item>
 
-            <NavDropdown.Item href='#home'>
-                Register New Resident Account
-            </NavDropdown.Item>
+            {registerResidentComponent}
 
             <NavDropdown.Item href='#home'>
                 List Users
             </NavDropdown.Item>
         </NavDropdown>
+
     </>;
 
 export default NavigationOptionsAdministratorView;
