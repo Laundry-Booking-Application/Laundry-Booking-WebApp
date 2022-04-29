@@ -7,8 +7,10 @@ import NavigationLogout from './js/presenters/navigationLogout';
 import NavigationOptions from './js/presenters/navigationOptions';
 import BookingSchedule from './js/presenters/bookingSchedule';
 import RegisterResident from './js/presenters/registerResident';
+import BookSlot from './js/presenters/bookSlot';
+import CancelSlot from './js/presenters/cancelSlot';
 import ShowBookedPass from './js/presenters/showBookedPass';
-import UsersList from './js/presenters/usersList'
+import UsersList from './js/presenters/usersList';
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from 'react-toastify';
 
@@ -36,7 +38,10 @@ function App({userModel, bookingModel}) {
 
       <ShowView hash={bookingScheduleHref}>
         <div>
-          <BookingSchedule userModel={userModel} bookingModel={bookingModel}/>
+          <BookingSchedule userModel={userModel} bookingModel={bookingModel}>
+            <BookSlot bookingModel={bookingModel}/>
+            <CancelSlot bookingModel={bookingModel}/>
+          </BookingSchedule>
         </div>
       </ShowView>
 
