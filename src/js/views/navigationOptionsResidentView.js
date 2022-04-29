@@ -1,15 +1,13 @@
 import {NavDropdown} from 'react-bootstrap';
 
-const NavigationOptionsResidentView = ({bookingScheduleHref }) =>
+const NavigationOptionsResidentView = ({bookingScheduleHref, showBookedPassComponent }) =>
     <>
-        <NavDropdown title='Options'>
+        <NavDropdown title='Options' variant='dark' menuVariant='dark' onClick={(e) => e.stopPropagation()}>
             <NavDropdown.Item  href={bookingScheduleHref}>
                 Booking Schedule
             </NavDropdown.Item>
 
-            <NavDropdown.Item href='#home'>
-                My Booking
-            </NavDropdown.Item>
+            {showBookedPassComponent}
         </NavDropdown>
     </>;
 

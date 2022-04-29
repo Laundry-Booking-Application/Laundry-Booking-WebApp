@@ -14,6 +14,8 @@ class UserModel {
         this.registeredUsername = null;
         this.privilege = null;
         this.errorData = null;
+        this.usersList = null;
+        this.deletionResult = null;
         this.checkLogin();
     }
 
@@ -126,6 +128,112 @@ class UserModel {
     }
 
     /**
+     * Lists all registered resident user accounts.
+     */
+    listUsers() {
+        LaundryData.listUsers()
+            .then((result) => {
+                if (result.ok) {
+                    result.json().then((data) => {
+                        this.populateUsersList(data.success);
+                    });
+                } else {
+                    result.json().then((data) => {
+                        this.emptyUsersList();
+                        // this.handleErrorMessages(result.status, data.error);
+                    });
+                }
+            })
+            .catch((error) => {
+                //   if (error instanceof TypeError) {
+                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                //   } else {
+                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                //   }
+            });
+    }
+
+    /**
+     * Deletes all information about the specified user and removes the user account from the system.
+     * @param {string} username The username of the user account that is to be removed from the system.
+     */
+    deleteUser(username) {
+        LaundryData.deleteUser(username)
+            .then((result) => {
+                if (result.ok) {
+                    result.json().then((data) => {
+                        this.emptyUsersList();
+                        this.updateDeletionResult(data.success);
+                        this.listUsers();
+                    });
+                } else {
+                    result.json().then((data) => {
+                        this.clearDeletionResult();
+                        // this.handleErrorMessages(result.status, data.error);
+                    });
+                }
+            })
+            .catch((error) => {
+                //   if (error instanceof TypeError) {
+                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                //   } else {
+                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                //   }
+            });
+    }
+
+    /**
+     * Updates the deletionResult property with the account deletion result.
+     * @param {Object} deletionData The account deletion data.
+     */
+    updateDeletionResult(deletionData) {
+        this.deletionResult = deletionData.result;
+        this.notifyObservers();
+    }
+
+    /**
+     * Clears the deletionResult property.
+     */
+    clearDeletionResult() {
+        this.deletionResult = null;
+        this.notifyObservers();
+    }
+
+    /**
+     * Populates the usersList property with the users account list information.
+     * @param {Object} usersListData The users account data.
+     */
+    populateUsersList(usersListData) {
+        this.usersList = usersListData.personInfo;
+        this.notifyObservers();
+    }
+
+    /**
+     * Clears the usersList property.
+     */
+    emptyUsersList() {
+        this.usersList = null;
+        this.notifyObservers();
+    }
+
+    /**
+     * Updates the registeredUsername property with the username of the newly registered resident account.
+     * @param {string} username The username for the newly registered resident account.
+     */
+    updateRegisteredUsername(username) {
+        this.registeredUsername = username;
+        this.notifyObservers();
+    }
+
+    /**
+     * Clears the registeredUsername property.
+     */
+    clearRegisteredUsername() {
+        this.registeredUsername = null;
+        this.notifyObservers();
+    }
+
+    /**
        * Set the user information in their proper place.
        * @param {boolean} loginStatus The status to indicate if the user is logged in or not.
        * @param {string} username The username for the logged in user.
@@ -135,23 +243,6 @@ class UserModel {
         this.loginStatus = loginStatus;
         this.username = username;
         this.privilege = privilege;
-        this.notifyObservers();
-    }
-
-    /**
-     * Updates the registeredUsername field with the username of the newly registered resident account.
-     * @param {*} username The username for the newly registered resident account.
-     */
-    updateRegisteredUsername(username) {
-        this.registeredUsername = username;
-        this.notifyObservers();
-    }
-
-    /**
-     * Clears the registeredUsername field.
-     */
-    clearRegisteredUsername() {
-        this.registeredUsername = null;
         this.notifyObservers();
     }
 

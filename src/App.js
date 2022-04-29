@@ -7,12 +7,14 @@ import NavigationLogout from './js/presenters/navigationLogout';
 import NavigationOptions from './js/presenters/navigationOptions';
 import BookingSchedule from './js/presenters/bookingSchedule';
 import RegisterResident from './js/presenters/registerResident';
+import ShowBookedPass from './js/presenters/showBookedPass';
+import UsersList from './js/presenters/usersList'
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from 'react-toastify';
 
 const homepageHref = '#home';
 const bookingScheduleHref = "#bookingSchedule";
-const listUsersHref = "#listUsers";
+const listUsersHref = "#usersList";
 
 function App({userModel, bookingModel}) {
   return (
@@ -20,8 +22,9 @@ function App({userModel, bookingModel}) {
       <Navigation userModel={userModel} homepageHref={homepageHref}>
         <NavigationLogin userModel={userModel}/>
         <NavigationLogout userModel={userModel} goToHomePageHref={homepageHref} bookingScheduleHref={bookingScheduleHref}/>
-        <NavigationOptions userModel={userModel} bookingScheduleHref={bookingScheduleHref}>
+        <NavigationOptions userModel={userModel} bookingModel={bookingModel} bookingScheduleHref={bookingScheduleHref}>
           <RegisterResident userModel={userModel}/>
+          <ShowBookedPass bookingModel={bookingModel}/>
         </NavigationOptions>
       </Navigation>
 
@@ -34,6 +37,12 @@ function App({userModel, bookingModel}) {
       <ShowView hash={bookingScheduleHref}>
         <div>
           <BookingSchedule userModel={userModel} bookingModel={bookingModel}/>
+        </div>
+      </ShowView>
+
+      <ShowView hash={listUsersHref}>
+        <div>
+          <UsersList userModel={userModel}/>
         </div>
       </ShowView>
   
