@@ -9,8 +9,8 @@ const NavigationOptionsAdministratorView = ({ bookingScheduleHref, registerResid
 
             {registerResidentComponent}
 
-            <NavDropdown.Item href='#home'>
-                List Users
+            <NavDropdown.Item href='#usersList'>
+                Users list
             </NavDropdown.Item>
         </NavDropdown>
 
