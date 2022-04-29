@@ -33,6 +33,9 @@ function Navigation({userModel, homepageHref, children}) {
         userModel.emptyErrorData();
     }
 
+
+
+    
     if (loginStatus) {
         return React.createElement(NavigationView, {
             component: [navigationOptionsComponent, navigationLogoutComponent],

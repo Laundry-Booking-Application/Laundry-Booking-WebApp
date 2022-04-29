@@ -5,21 +5,21 @@ import BookingScheduleAdministratorView from '../views/bookingScheduleAdministra
 import BookingScheduleResidentView from '../views/bookingScheduleResidentView';
 import UnauthorizedAccessView from '../views/unauthorizedAccessView';
 import WaitingDataView from '../views/waitingDataView';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 
-function BookingSchedule({userModel, bookingModel, children}) {
+function BookingSchedule({ userModel, bookingModel, children }) {
     const [week, setWeek] = React.useState('0');
     const [date, setDate] = React.useState('');
     const [room, setRoom] = React.useState('');
     const [range, setRange] = React.useState('');
     const [username, setUsername] = React.useState('');
-    let loginStatus = useModelProp(userModel, 'loginStatus');
-    let userPrivilege = useModelProp(userModel, 'privilege');
-    let bookingSchedule = useModelProp(bookingModel, 'bookingSchedule');
+    const loginStatus = useModelProp(userModel, 'loginStatus');
+    const userPrivilege = useModelProp(userModel, 'privilege');
+    const bookingSchedule = useModelProp(bookingModel, 'bookingSchedule');
     const weekDayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const [previousWeek, currentWeek, nextWeek] = [-1, 0, 1];
-    let [bookSlotComponent, cancelSlotComponent] = children;
-    let bookedSlot = useModelProp(bookingModel, 'bookedSlot');
+    const [bookSlotComponent, cancelSlotComponent] = children;
+    const bookedSlot = useModelProp(bookingModel, 'bookedSlot');
     const cancellationResult = useModelProp(bookingModel, 'adminCancelResult');
 
     React.useEffect(
@@ -36,56 +36,62 @@ function BookingSchedule({userModel, bookingModel, children}) {
         },
         [loginStatus, userPrivilege, week, bookingModel, date, room, range, username]
     );
-    
+
+    React.useEffect(() => {
+        if (bookedSlot) {
+            let message = `New booking has been registered. Booking info: Date: ${bookedSlot[0]}, Room: ${bookedSlot[1]}, Range: ${bookedSlot[2]}.`;
+            toast.success(message, {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: true,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: false,
+                progress: undefined,
+                theme: "colored"
+            });
+            bookingModel.clearBookedSlot();
+        }
+
+        if (cancellationResult !== null) {
+            if (cancellationResult === true) {
+                let cancellationMessage = `The laundry pass has been successfully cancelled!`;
+                toast.success(cancellationMessage, {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: true,
+                    hideProgressBar: true,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored"
+                });
+                bookingModel.emptyAdminCancellationResult();
+            }
+            else {
+                let cancellationMessage = `An error has occurred while cancelling the laundry pass!`;
+                toast.error(cancellationMessage, {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: true,
+                    hideProgressBar: true,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored"
+                });
+                bookingModel.emptyAdminCancellationResult();
+            }
+        }
+    }, [bookedSlot, cancellationResult]);
+
     if (bookingSchedule === null) {
         return React.createElement(WaitingDataView, {});
     }
 
-    if (bookedSlot) {
-        let message = `New booking has been registered. Booking info: Date: ${bookedSlot[0]}, Room: ${bookedSlot[1]}, Range: ${bookedSlot[2]}.`;
-        toast.success(message, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: true,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: false,
-            progress: undefined,
-            theme: "colored"
-        });
-        bookingModel.clearBookedSlot();
-    }
+   
 
-    if (cancellationResult !== null) {
-        if (cancellationResult === true) {
-            let cancellationMessage = `The laundry pass has been successfully cancelled!`;
-            toast.success(cancellationMessage, {
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: true,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: false,
-                progress: undefined,
-                theme: "colored"
-            });
-            bookingModel.emptyAdminCancellationResult();
-        }
-        else {
-            let cancellationMessage = `An error has occurred while cancelling the laundry pass!`;
-            toast.error(cancellationMessage, {
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: true,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: false,
-                progress: undefined,
-                theme: "colored"
-            });
-            bookingModel.emptyAdminCancellationResult();
-        }
-    }
+
 
     if (loginStatus) {
         if (userPrivilege === privileges.Administrator) {
@@ -104,7 +110,7 @@ function BookingSchedule({userModel, bookingModel, children}) {
                 cancelSlotComponent: cancelSlotComponent
             });
         }
-        
+
         return React.createElement(BookingScheduleResidentView, {
             weekDays: combineArrays(weekDayNames, bookingSchedule.weekDates),
             setWeek: (week) => setWeek(week),
@@ -115,6 +121,7 @@ function BookingSchedule({userModel, bookingModel, children}) {
             setDate: setDate,
             setRoom: setRoom,
             setRange: setRange,
+            applyLock: (passRoom, passDate, passRange) => bookingModel.lockPass(passRoom, passDate, passRange),
             showInfo: () => bookingModel.setShowInfo(true),
             bookSlotComponent: bookSlotComponent
         });
@@ -125,7 +132,7 @@ function BookingSchedule({userModel, bookingModel, children}) {
 
 function combineArrays(array1, array2) {
     let combined = [];
-    
+
     for (let i = 0; i < array1.length; i++) {
         combined[i] = array1[i] + ' ' + array2[i];
     }
