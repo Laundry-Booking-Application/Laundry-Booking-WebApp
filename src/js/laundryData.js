@@ -1,7 +1,7 @@
-import BASE_URL from "./apiConfig";
+import BASE_URL from './apiConfig';
 
 /**
- * Responsible for the api calls that will happen in the website. Ranging from creating the 
+ * Responsible for the api calls that will happen in the website. Ranging from creating the
  * proper request to receiving the response.
  */
 const LaundryData = {
@@ -9,14 +9,18 @@ const LaundryData = {
      * Performs HTTP API calls using the Fetch API.
      * The base url for the API calls is specified in the apiConfig.js file.
      * @param {string} urlPath The url path that is specific to the requested service.
-     * @param {Request} requestContent The request content to be sent to the remote server. 
-     * @returns {Response} The response received from the remote server.
+     * @param {Request} requestContent The request content to be sent to the remote server.
+     * @return {Response} The response received from the remote server.
      * @throws {Exception} If an error occurs.
      */
     apiCall(urlPath, requestContent) {
         const fetchData = fetch(BASE_URL + urlPath, requestContent)
-            .then((response) => { return response; })
-            .catch((error) => { throw error; });
+            .then((response) => {
+                return response;
+            })
+            .catch((error) => {
+                throw error;
+            });
         return fetchData;
     },
 
@@ -24,7 +28,7 @@ const LaundryData = {
      * Attempts to login a user using the provided login credentials.
      * @param {string} username The username of the account.
      * @param {string} password The password of the account.
-     * @returns {Response} The response received from the login endpoint.
+     * @return {Response} The response received from the login endpoint.
      */
     loginUser(username, password) {
         return this.apiCall(
@@ -34,13 +38,13 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "username": username,
-                    "password": password
+                    'username': username,
+                    'password': password,
                 }),
-            }
+            },
         ).then((response) => {
             return response;
         });
@@ -55,7 +59,7 @@ const LaundryData = {
      * @param {string} email The email of the new user.
      * @param {string} username the username for the new account.
      * @param {string} password The password for the new account.
-     * @returns {Response} The response received from the register resident endpoint.
+     * @return {Response} The response received from the register resident endpoint.
      */
     registerResident(firstName, lastName, personNumber, email, username, password) {
         return this.apiCall(
@@ -65,15 +69,15 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "firstname": firstName,
-                    "lastname": lastName,
-                    "personalNumber": personNumber,
-                    "email": email,
-                    "username": username,
-                    "password": password
+                    'firstname': firstName,
+                    'lastname': lastName,
+                    'personalNumber': personNumber,
+                    'email': email,
+                    'username': username,
+                    'password': password,
                 }),
             })
             .then((response) => {
@@ -84,7 +88,7 @@ const LaundryData = {
 
     /**
      * Checks whether a user is already logged in or not.
-     * @returns The response received from the login check endpoint.
+     * @return {Response} The response received from the login check endpoint.
      */
     checkLogin() {
         return this.apiCall(
@@ -94,8 +98,8 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                }
-            }
+                },
+            },
         ).then((response) => {
             return response;
         });
@@ -103,7 +107,7 @@ const LaundryData = {
 
     /**
      * Logs out the currently logged in user.
-     * @returns {Response} The response received from the logout endpoint.
+     * @return {Response} The response received from the logout endpoint.
      */
     logoutUser() {
         return this.apiCall(
@@ -113,19 +117,18 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                }
-            }
+                },
+            },
         ).then((response) => {
             return response;
         });
     },
 
 
-
     /**
      * Lists the registered resident accounts.
      * This endpoint is only accessible by administrators.
-     * @returns {Response} The response received from the list users endpoint.
+     * @return {Response} The response received from the list users endpoint.
      */
     listUsers() {
         return this.apiCall(
@@ -135,8 +138,8 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                }
-            }
+                },
+            },
         )
             .then((response) => {
                 return response;
@@ -147,7 +150,7 @@ const LaundryData = {
      * Attempts to delete a user account.
      * This endpoint is only accessible by administrators.
      * @param {string} username The username of the account.
-     * @returns {Response} The response received from the delete user endpoint.
+     * @return {Response} The response received from the delete user endpoint.
      */
     deleteUser(username) {
         return this.apiCall(
@@ -157,12 +160,12 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "username": username
+                    'username': username,
                 }),
-            }
+            },
         ).then((response) => {
             return response;
         });
@@ -174,7 +177,7 @@ const LaundryData = {
      * @param {int} roomNumber The number related to the chosen room.
      * @param {string} date The date of the laundry pass.
      * @param {string} passRange The time frame that the pass has.
-     * @returns {Response} The response received from the lock pass endpoint.
+     * @return {Response} The response received from the lock pass endpoint.
      */
     lockPass(roomNumber, date, passRange) {
         return this.apiCall(
@@ -184,14 +187,14 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "roomNumber": roomNumber,
-                    "date": date,
-                    "passRange": passRange
+                    'roomNumber': roomNumber,
+                    'date': date,
+                    'passRange': passRange,
                 }),
-            }
+            },
         ).then((response) => {
             return response;
         });
@@ -199,7 +202,7 @@ const LaundryData = {
 
     /**
      * Unlocks the temporarily locked laundry pass.
-     * @returns {Response} The response received from the unlock pass endpoint.
+     * @return {Response} The response received from the unlock pass endpoint.
      */
     unlockPass() {
         return this.apiCall(
@@ -209,9 +212,9 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
-                }
-            }
+                    'Content-Type': 'application/json',
+                },
+            },
         ).then((response) => {
             return response;
         });
@@ -222,7 +225,7 @@ const LaundryData = {
      * @param {int} roomNumber The number related to the chosen room.
      * @param {string} date The date of the laundry pass.
      * @param {string} passRange The time frame that the pass has.
-     * @returns {Response} The response received from the book pass endpoint.
+     * @return {Response} The response received from the book pass endpoint.
      */
     bookPass(roomNumber, date, passRange) {
         return this.apiCall(
@@ -232,14 +235,14 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "roomNumber": roomNumber,
-                    "date": date,
-                    "passRange": passRange
+                    'roomNumber': roomNumber,
+                    'date': date,
+                    'passRange': passRange,
                 }),
-            }
+            },
         ).then((response) => {
             return response;
         });
@@ -247,7 +250,7 @@ const LaundryData = {
 
     /**
      * Gets the active laundry pass for the currently logged in user
-     * @returns {Response} The response received from the get booked pass endpoint.
+     * @return {Response} The response received from the get booked pass endpoint.
      */
     getBookedPass() {
         return this.apiCall(
@@ -257,8 +260,8 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                }
-            }
+                },
+            },
         ).then((response) => {
             return response;
         });
@@ -269,7 +272,7 @@ const LaundryData = {
      * @param {int} roomNumber The number related to the chosen room.
      * @param {string} date The date of the laundry pass.
      * @param {string} passRange The time frame that the pass has.
-     * @returns {Response} The response received from the cancel booked pass endpoint.
+     * @return {Response} The response received from the cancel booked pass endpoint.
      */
     cancelBookedPass(roomNumber, date, passRange) {
         return this.apiCall(
@@ -279,14 +282,14 @@ const LaundryData = {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "roomNumber": roomNumber,
-                    "date": date,
-                    "passRange": passRange
+                    'roomNumber': roomNumber,
+                    'date': date,
+                    'passRange': passRange,
                 }),
-            }
+            },
         ).then((response) => {
             return response;
         });
@@ -296,20 +299,20 @@ const LaundryData = {
      * Fetches the laundry passes' schedule for the specified week.
      * @param {string} week The requested week to get the laundry passes' schedule for.
      *                      Accepted values are -1, 0 and 1 for previous, current and next week respectively.
-     * @returns {Response} The response received from the get resident passes endpoint.
+     * @return {Response} The response received from the get resident passes endpoint.
      */
     getResidentPasses(week) {
         return this.apiCall(
             'booking/getResidentPasses?' + new URLSearchParams({
-                "week": week
+                'week': week,
             })
             , {
                 method: 'get',
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                }
-            }
+                },
+            },
         )
             .then((response) => {
                 return response;
@@ -321,20 +324,20 @@ const LaundryData = {
      * This endpoint is only accessible by administrators.
      * @param {string} week The requested week to get the laundry passes' schedule for.
      *                      This parameter is relative to the current week, e.g. -2 is two weeks before the current week.
-     * @returns {Response} The response received from the get passes endpoint.
+     * @return {Response} The response received from the get passes endpoint.
      */
     getPasses(week) {
         return this.apiCall(
             'booking/getPasses?' + new URLSearchParams({
-                "week": week
+                'week': week,
             })
             , {
                 method: 'get',
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
-                }
-            }
+                },
+            },
         )
             .then((response) => {
                 return response;

@@ -1,4 +1,4 @@
-import LaundryData from "./laundryData";
+import LaundryData from './laundryData';
 
 /**
  * Responsible for handling all the information about the bookings.
@@ -134,7 +134,7 @@ class BookingModel {
                 } else {
                     result.json().then((data) => {
                         this.emptyBookedPassData();
-                        this.handleErrorMessages(result.status, data.error);
+                        // this.handleErrorMessages(result.status, data.error); Not needed.
                     });
                 }
             })
@@ -308,7 +308,7 @@ class BookingModel {
 
     /**
      * Updates the admin booking cancellation result property using the data contained in the adminCancelResult.
-     * @param {Object} cancellationData The object containing the booking cancellation data.
+     * @param {Object} adminCancelResult The object containing the booking cancellation data.
      */
     setAdminCancellationResult(adminCancelResult) {
         this.adminCancelResult = adminCancelResult.result;
@@ -425,22 +425,23 @@ class BookingModel {
 
     /**
      * Removes the observer from the class.
-     * @param {Observer} obs The observer 
+     * @param {Observer} obs The observer
      */
     removeObserver(obs) {
-        this.subscribers = this.subscribers.filter(o => { return o !== obs; });
+        this.subscribers = this.subscribers.filter((o) => {
+            return o !== obs;
+        });
     }
 
     /**
      * Notifies the observers after any changes.
      */
     notifyObservers() {
-        this.subscribers.forEach(callback => {
+        this.subscribers.forEach((callback) => {
             try {
                 callback();
-            }
-            catch (err) {
-                console.error("Callback error: ", err, callback);
+            } catch (err) {
+                console.error('Callback error: ', err, callback);
             }
         });
     }
@@ -450,7 +451,7 @@ class BookingModel {
     * @param {number} status The status code related to the error.
     * @param {string | {msg, param}} error The error that happened.
     */
-     handleErrorMessages(status, error) {
+    handleErrorMessages(status, error) {
         if (typeof error === 'string') {
             this.reportError(status, error);
             return;
@@ -470,7 +471,7 @@ class BookingModel {
     * @param {string} message The message explanting the error.
     */
     reportError(code, message) {
-        this.errorData = { code: code, message: message };
+        this.errorData = {code: code, message: message};
         this.notifyObservers();
     }
 

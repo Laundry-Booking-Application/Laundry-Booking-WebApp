@@ -5,9 +5,18 @@ import BookingScheduleAdministratorView from '../views/bookingScheduleAdministra
 import BookingScheduleResidentView from '../views/bookingScheduleResidentView';
 import UnauthorizedAccessView from '../views/unauthorizedAccessView';
 import WaitingDataView from '../views/waitingDataView';
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 
-function BookingSchedule({ userModel, bookingModel, children }) {
+/**
+ * The presenter for creating the laundry pass booking schedule form.
+ * @param {Object} {userModel, bookingModel, children}
+ *                 userModel The object that contains data about user information and authentication.
+ *                 bookingModel The booking model that contains the necessary functionalities for booking laundry passes.
+ *                 children The children components to be rendered as part of the booking schedule component.
+ * @return {WaitingDataView | BookingScheduleAdministratorView | BookingScheduleResidentView | UnauthorizedAccessView}
+ *         The proper component depending on the privilege of the logged-in user and the availability of the data.
+ */
+function BookingSchedule({userModel, bookingModel, children}) {
     const [week, setWeek] = React.useState('0');
     const [date, setDate] = React.useState('');
     const [room, setRoom] = React.useState('');
@@ -23,17 +32,17 @@ function BookingSchedule({ userModel, bookingModel, children }) {
     const cancellationResult = useModelProp(bookingModel, 'adminCancelResult');
 
     React.useEffect(
-        function () {
+        function() {
             if (loginStatus) {
                 if (userPrivilege === privileges.Administrator) {
                     bookingModel.getAdministratorBookingSchedule(week);
                 }
                 if (userPrivilege === privileges.Standard) {
                     bookingModel.getResidentBookingSchedule(week);
-                }   
+                }
             }
         },
-        [loginStatus, userPrivilege, week, bookingModel]
+        [loginStatus, userPrivilege, week, bookingModel],
     );
 
     React.useEffect(() => {
@@ -53,7 +62,7 @@ function BookingSchedule({ userModel, bookingModel, children }) {
 
     React.useEffect(() => {
         if (bookedSlot) {
-            let message = `New booking has been registered. Booking info: Date: ${bookedSlot[0]}, Room: ${bookedSlot[1]}, Range: ${bookedSlot[2]}.`;
+            const message = `New booking has been registered. Booking info: Date: ${bookedSlot[0]}, Room: ${bookedSlot[1]}, Range: ${bookedSlot[2]}.`;
             toast.success(message, {
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: true,
@@ -62,14 +71,14 @@ function BookingSchedule({ userModel, bookingModel, children }) {
                 pauseOnHover: true,
                 draggable: false,
                 progress: undefined,
-                theme: "colored"
+                theme: 'colored',
             });
             bookingModel.emptyBookingSlot();
         }
 
         if (cancellationResult !== null) {
             if (cancellationResult === true) {
-                let cancellationMessage = `The laundry pass has been successfully cancelled!`;
+                const cancellationMessage = `The laundry pass has been successfully cancelled!`;
                 toast.success(cancellationMessage, {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: true,
@@ -78,12 +87,11 @@ function BookingSchedule({ userModel, bookingModel, children }) {
                     pauseOnHover: true,
                     draggable: false,
                     progress: undefined,
-                    theme: "colored"
+                    theme: 'colored',
                 });
                 bookingModel.emptyAdminCancellationResult();
-            }
-            else {
-                let cancellationMessage = `An error has occurred while cancelling the laundry pass!`;
+            } else {
+                const cancellationMessage = `An error has occurred while cancelling the laundry pass!`;
                 toast.error(cancellationMessage, {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: true,
@@ -92,7 +100,7 @@ function BookingSchedule({ userModel, bookingModel, children }) {
                     pauseOnHover: true,
                     draggable: false,
                     progress: undefined,
-                    theme: "colored"
+                    theme: 'colored',
                 });
                 bookingModel.emptyAdminCancellationResult();
             }
@@ -117,7 +125,7 @@ function BookingSchedule({ userModel, bookingModel, children }) {
                 setRange: setRange,
                 setUsername: setUsername,
                 showInfo: () => bookingModel.setShowInfo(true),
-                cancelSlotComponent: cancelSlotComponent
+                cancelSlotComponent: cancelSlotComponent,
             });
         }
 
@@ -133,15 +141,16 @@ function BookingSchedule({ userModel, bookingModel, children }) {
             setRange: setRange,
             applyLock: (passRoom, passDate, passRange) => bookingModel.lockPass(passRoom, passDate, passRange),
             showInfo: () => bookingModel.setShowInfo(true),
-            bookSlotComponent: bookSlotComponent
+            bookSlotComponent: bookSlotComponent,
         });
     }
 
     return React.createElement(UnauthorizedAccessView, {});
 }
 
+// eslint-disable-next-line require-jsdoc
 function combineArrays(array1, array2) {
-    let combined = [];
+    const combined = [];
 
     for (let i = 0; i < array1.length; i++) {
         combined[i] = array1[i] + ' ' + array2[i];

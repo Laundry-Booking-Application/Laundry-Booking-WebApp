@@ -3,9 +3,19 @@ import useModelProp from '../useModelProp';
 import NavigationOptionsAdministratorView from '../views/navigationOptionsAdministratorView';
 import NavigationOptionsResidentView from '../views/navigationOptionsResidentView';
 import privileges from '../privilegeEnum';
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 
-function NavigationOptions({ userModel, bookingModel, bookingScheduleHref, children }) {
+/**
+ * The presenter for creating the navigation options dropdown menu.
+ * @param {Object} {userModel, bookingModel, bookingScheduleHref, children}
+ *                 userModel The object that contains data about user information and authentication.
+ *                 bookingModel The booking model that contains the necessary functionalities for booking laundry passes.
+ *                 bookingScheduleHref Contains a string reference to the booking schedule page hash.
+ *                 children The children components to be rendered as part of the navigation options component.
+ * @return {NavigationOptionsAdministratorView | NavigationOptionsResidentView}
+ *         The proper component depending on the privilege of the logged-in user.
+ */
+function NavigationOptions({userModel, bookingModel, bookingScheduleHref, children}) {
     const userPrivilege = useModelProp(userModel, 'privilege');
     const registeredUsernameData = useModelProp(userModel, 'registeredUsername');
     const cancellationResult = useModelProp(bookingModel, 'cancellationResult');
@@ -13,7 +23,7 @@ function NavigationOptions({ userModel, bookingModel, bookingScheduleHref, child
 
     React.useEffect(() => {
         if (registeredUsernameData) {
-            let registerMessage = `New resident account has been registered with the username: ${registeredUsernameData}`;
+            const registerMessage = `New resident account has been registered with the username: ${registeredUsernameData}`;
             toast.success(registerMessage, {
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: true,
@@ -22,7 +32,7 @@ function NavigationOptions({ userModel, bookingModel, bookingScheduleHref, child
                 pauseOnHover: true,
                 draggable: false,
                 progress: undefined,
-                theme: "colored"
+                theme: 'colored',
             });
             userModel.clearRegisteredUsername();
         }
@@ -30,7 +40,7 @@ function NavigationOptions({ userModel, bookingModel, bookingScheduleHref, child
         if (cancellationResult !== null) {
             if (cancellationResult === true) {
                 bookingModel.emptyCancellationResult();
-                let cancellationMessage = `Your laundry pass has been successfully cancelled!`;
+                const cancellationMessage = `Your laundry pass has been successfully cancelled!`;
                 toast.success(cancellationMessage, {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: true,
@@ -39,12 +49,11 @@ function NavigationOptions({ userModel, bookingModel, bookingScheduleHref, child
                     pauseOnHover: true,
                     draggable: false,
                     progress: undefined,
-                    theme: "colored"
+                    theme: 'colored',
                 });
-            }
-            else {
+            } else {
                 bookingModel.emptyCancellationResult();
-                let cancellationMessage = `An error has occurred while cancelling your laundry pass!`;
+                const cancellationMessage = `An error has occurred while cancelling your laundry pass!`;
                 toast.error(cancellationMessage, {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: true,
@@ -53,9 +62,8 @@ function NavigationOptions({ userModel, bookingModel, bookingScheduleHref, child
                     pauseOnHover: true,
                     draggable: false,
                     progress: undefined,
-                    theme: "colored"
+                    theme: 'colored',
                 });
-
             }
         }
     }, [registeredUsernameData, cancellationResult]);
@@ -63,13 +71,13 @@ function NavigationOptions({ userModel, bookingModel, bookingScheduleHref, child
     if (userPrivilege === privileges.Administrator) {
         return React.createElement(NavigationOptionsAdministratorView, {
             bookingScheduleHref: bookingScheduleHref,
-            registerResidentComponent: registerResidentComponent
+            registerResidentComponent: registerResidentComponent,
         });
     }
 
     return React.createElement(NavigationOptionsResidentView, {
         bookingScheduleHref: bookingScheduleHref,
-        showBookedPassComponent: showBookedPassComponent
+        showBookedPassComponent: showBookedPassComponent,
     });
 }
 

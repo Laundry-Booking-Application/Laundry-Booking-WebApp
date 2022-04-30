@@ -15,7 +15,7 @@ const RegisterResidentView = ({ setFirstName, setLastName, setPersonNumber, setE
                     <Form>
                         <Form.Group controlId="formBasicFirstName" className='py-1'>
                             <Form.Label>First Name</Form.Label>
-                            <Form.Control onChange={e => setFirstName(e.target.value)} type="text" placeholder="Max" />
+                            <Form.Control onChange={e => setFirstName(e.target.value)} type="text" placeholder="Svea" />
                         </Form.Group>
 
                         <Form.Group controlId="formBasicLastName" className='py-1'>
@@ -35,12 +35,12 @@ const RegisterResidentView = ({ setFirstName, setLastName, setPersonNumber, setE
 
                         <Form.Group controlId="formBasicUsername" className='py-1'>
                             <Form.Label>Username</Form.Label>
-                            <Form.Control onChange={e => setUsername(e.target.value)} type="text" placeholder="MaxJ123" />
+                            <Form.Control onChange={e => setUsername(e.target.value)} type="text" placeholder="SveaJ123" />
                         </Form.Group>
 
                         <Form.Group controlId="formBasicPassword" className='py-1'>
                             <Form.Label>Password</Form.Label>
-                            <Form.Control onChange={e => setPassword(e.target.value)} type="password" placeholder="Password" />
+                            <Form.Control onChange={e => setPassword(e.target.value)} type="password" placeholder="Password (Min. 8 characters)" />
                         </Form.Group>
 
                         <Button variant="success" className='my-2' onClick={(e) => { e.preventDefault(); handleClose(); handleRegister(); }}>
