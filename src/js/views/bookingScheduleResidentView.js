@@ -1,7 +1,7 @@
 import {Table, Button} from 'react-bootstrap';
 
 const BookingScheduleResidentView = ({ weekDays, setWeek, previousWeek, currentWeek, nextWeek, bookingSchedule,  
-    setDate, setRoom, setRange, showInfo, bookSlotComponent}) =>
+    setDate, setRoom, setRange, applyLock, showInfo, bookSlotComponent}) =>
     <>
         <Table striped bordered hover responsive>
             <thead>
@@ -28,7 +28,7 @@ const BookingScheduleResidentView = ({ weekDays, setWeek, previousWeek, currentW
                                                 }
                                                 return <div><Button className='m-1' variant='success' 
                                                 onClick={(e)=> {setDate(pass.date); setRoom(room.roomNum); 
-                                                setRange(slot.range); showInfo();}}>{slot.range}</Button></div>
+                                                setRange(slot.range); applyLock(room.roomNum, pass.date, slot.range); showInfo();}}>{slot.range}</Button></div>
                                             }
                                             )
                                         }

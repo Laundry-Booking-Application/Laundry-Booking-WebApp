@@ -61,6 +61,7 @@ class BookingModel {
             .then((result) => {
                 if (result.ok) {
                     result.json().then((data) => {
+                        this.emptyBookingScheduleModelData();
                         this.populateBookingSchedule(data.success);
                     });
                 } else {
@@ -78,20 +79,6 @@ class BookingModel {
             });
     }
 
-
-    populateBookingSchedule(bookingSchedule) {
-        this.bookingSchedule = bookingSchedule;
-        this.notifyObservers();
-    }
-
-    /**
-   * Reset the information about the logged in user.
-   */
-    emptyBookingScheduleModelData() {
-        this.bookingSchedule = null;
-        this.notifyObservers();
-    }
-
     bookChosenSlot(roomNum, date, range) {
         LaundryData.bookPass(roomNum, date, range)
             .then((result) => {
@@ -102,6 +89,8 @@ class BookingModel {
                         const range = data.success.passRange;
                         this.populateBookingSlot(date, roomNum, range);
                         this.emptySelectedBooking();
+                        this.getResidentBookingSchedule(0);
+                        this.getBookedPass();
                     });
                 } else {
                     result.json().then((data) => {
@@ -117,37 +106,6 @@ class BookingModel {
                 //   }
             });
         return;
-    }
-
-    populateBookingSlot(date, roomNum, range) {
-        this.bookedSlot = [date, roomNum, range];
-        this.notifyObservers();
-    }
-
-    selectBooking(date, roomNum, range, username) {
-        this.selectedDate = date;
-        this.selectedRoomNum = roomNum;
-        this.selectedRange = range;
-        this.selectedUsername = username;
-        this.notifyObservers();
-    }
-
-    emptySelectedBooking() {
-        this.selectedRoomNum = null;
-        this.selectedDate = null;
-        this.selectedRange = null;
-        this.selectedUsername = null;
-        this.notifyObservers();
-    }
-
-    setShowInfo(status) {
-        this.showInfo = status;
-        this.notifyObservers();
-    }
-
-    clearBookedSlot() {
-        this.bookedSlot = null;
-        this.notifyObservers();
     }
 
     /**
@@ -189,6 +147,7 @@ class BookingModel {
                     result.json().then((data) => {
                         this.updateCancellationResult(data.success);
                         this.getBookedPass();
+                        this.getResidentBookingSchedule(0);
                     });
                 } else {
                     result.json().then((data) => {
@@ -212,12 +171,13 @@ class BookingModel {
      * @param {string} date The date that the active laundry pass is booked on.
      * @param {string} passRange The time frame that the pass has.
      */
-     cancelBookedPassAsAdmin(roomNumber, date, passRange) {
+    cancelBookedPassAsAdmin(roomNumber, date, passRange) {
         LaundryData.cancelBookedPass(roomNumber, date, passRange)
             .then((result) => {
                 if (result.ok) {
                     result.json().then((data) => {
                         this.setAdminCancellationResult(data.success);
+                        this.getAdministratorBookingSchedule(0);
                     });
                 } else {
                     result.json().then((data) => {
@@ -235,11 +195,63 @@ class BookingModel {
     }
 
     /**
+     * Temporarily locks a specific laundry pass slot.
+     * @param {int} roomNumber The number related to the chosen room.
+     * @param {string} date The date of the laundry pass.
+     * @param {string} passRange The time frame that the pass has.
+     */
+    lockPass(roomNumber, date, passRange){
+        LaundryData.lockPass(roomNumber, date, passRange)
+        .then((result) => {
+            if (result.ok) {
+                result.json().then((data) => {
+                    // If locked successfully, do nothing!
+                });
+            } else {
+                result.json().then((data) => {
+                    // this.handleErrorMessages(result.status, data.error);
+                });
+            }
+        })
+        .catch((error) => {
+            //   if (error instanceof TypeError) {
+            //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+            //   } else {
+            //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+            //   }
+        });
+    }
+
+    /**
+     * Unlocks the temporarily locked laundry pass slot that the user had locked.
+     */
+    unlockPass(){
+        LaundryData.unlockPass()
+        .then((result) => {
+            if (result.ok) {
+                result.json().then((data) => {
+                    // If unlocked successfully, do nothing!
+                });
+            } else {
+                result.json().then((data) => {
+                    // this.handleErrorMessages(result.status, data.error);
+                });
+            }
+        })
+        .catch((error) => {
+            //   if (error instanceof TypeError) {
+            //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+            //   } else {
+            //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+            //   }
+        });
+    }
+
+    /**
      * Updates the booking cancellation result property using the data contained in the cancellationData.
      * @param {Object} cancellationData The object containing the booking cancellation data.
      */
-    updateCancellationResult(cancellationData)
-    {
+    updateCancellationResult(cancellationData) {
         this.cancellationResult = cancellationData.result;
         this.notifyObservers();
     }
@@ -247,8 +259,7 @@ class BookingModel {
     /**
      * Resets the data contained in the cancellation result property.
      */
-    emptyCancellationResult()
-    {
+    emptyCancellationResult() {
         this.cancellationResult = null;
         this.notifyObservers();
     }
@@ -304,6 +315,39 @@ class BookingModel {
         this.bookingSchedule = null;
         this.notifyObservers();
     }
+
+
+    populateBookingSlot(date, roomNum, range) {
+        this.bookedSlot = [date, roomNum, range];
+        this.notifyObservers();
+    }
+
+    selectBooking(date, roomNum, range, username) {
+        this.selectedDate = date;
+        this.selectedRoomNum = roomNum;
+        this.selectedRange = range;
+        this.selectedUsername = username;
+        this.notifyObservers();
+    }
+
+    emptySelectedBooking() {
+        this.selectedRoomNum = null;
+        this.selectedDate = null;
+        this.selectedRange = null;
+        this.selectedUsername = null;
+        this.notifyObservers();
+    }
+
+    setShowInfo(status) {
+        this.showInfo = status;
+        this.notifyObservers();
+    }
+
+    clearBookedSlot() {
+        this.bookedSlot = null;
+        this.notifyObservers();
+    }
+
 
     /**
      * Adds an observer to the class.
