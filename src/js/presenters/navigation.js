@@ -12,10 +12,11 @@ import {toast} from 'react-toastify';
  * @param {Component} children The components that are going to be rendered.
  * @returns {NavigationView} An element with the navigation components depending on the login status.
  */
-function Navigation({userModel, homepageHref, children}) {
+function Navigation({userModel, bookingModel, homepageHref, children}) {
     const loginStatus = useModelProp(userModel, 'loginStatus');
     const [navigationLoginComponent, navigationLogoutComponent, navigationOptionsComponent] = children;
     const errorDataUser = useModelProp(userModel, 'errorData');
+    const errorDataBooking = useModelProp(bookingModel, 'errorData');
     const [toggleState, setToggleState] = React.useState(false);
     
     
@@ -33,9 +34,20 @@ function Navigation({userModel, homepageHref, children}) {
         userModel.emptyErrorData();
     }
 
+    if (errorDataBooking) {
+        toast.error(errorDataBooking.message, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored'
+        });
+        bookingModel.emptyErrorData();
+    }
 
-
-    
     if (loginStatus) {
         return React.createElement(NavigationView, {
             component: [navigationOptionsComponent, navigationLogoutComponent],

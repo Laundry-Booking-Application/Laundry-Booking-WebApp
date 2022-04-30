@@ -29,6 +29,7 @@ class UserModel {
             .then((result) => {
                 if (result.ok) {
                     result.json().then((data) => {
+                        this.emptyUserModelData();
                         let userLoggedIn = true;
                         let currentUsername = data.success.username;
                         let currentPrivilege = data.success.privilegeID;
@@ -36,16 +37,18 @@ class UserModel {
                     });
                 } else {
                     result.json().then((data) => {
-                        // this.handleErrorMessages(result.status, data.error);
+                        this.emptyUserModelData();
+                        this.handleErrorMessages(result.status, data.error);
                     });
                 }
             })
             .catch((error) => {
-                //   if (error instanceof TypeError) {
-                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
-                //   } else {
-                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
-                //   }
+                this.emptyUserModelData();
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                }
             });
     }
 
@@ -63,22 +66,25 @@ class UserModel {
             .then((result) => {
                 if (result.ok) {
                     result.json().then((data) => {
+                        this.clearRegisteredUsername();
                         let residentUsername = data.success.username;
                         this.updateRegisteredUsername(residentUsername);
+                        this.listUsers();
                     });
                 } else {
                     result.json().then((data) => {
                         this.clearRegisteredUsername();
-                        // this.handleErrorMessages(result.status, data.error);
+                        this.handleErrorMessages(result.status, data.error);
                     });
                 }
             })
             .catch((error) => {
-                //   if (error instanceof TypeError) {
-                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
-                //   } else {
-                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
-                //   }
+                this.emptyUserModelData();
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                }
             });
     }
 
@@ -91,14 +97,20 @@ class UserModel {
                 result.json().then((data) => {
                     this.emptyUserModelData();
                 });
+            } else {
+                result.json().then((data) => {
+                    this.emptyUserModelData();
+                    this.handleErrorMessages(result.status, data.error);
+                });
             }
         })
             .catch((error) => {
-                // if (error instanceof TypeError) {
-                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
-                // } else {
-                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
-                // }
+                this.emptyUserModelData();
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                }
             });
     }
 
@@ -110,6 +122,7 @@ class UserModel {
             .then((result) => {
                 if (result.ok) {
                     result.json().then((data) => {
+                        this.emptyUserModelData();
                         let userLoginStatus = true;
                         let currentUsername = data.success.username;
                         let currentPrivilege = data.success.privilegeID;
@@ -121,35 +134,40 @@ class UserModel {
                 }
             })
             .catch((error) => {
-                //if (error instanceof TypeError) {
-                //    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
-                //}
+                this.emptyUserModelData();
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                }
             });
     }
 
     /**
-     * Lists all registered resident user accounts.
+     * Lists all the registered resident user accounts.
      */
     listUsers() {
         LaundryData.listUsers()
             .then((result) => {
                 if (result.ok) {
                     result.json().then((data) => {
+                        this.emptyUsersList();
                         this.populateUsersList(data.success);
                     });
                 } else {
                     result.json().then((data) => {
                         this.emptyUsersList();
-                        // this.handleErrorMessages(result.status, data.error);
+                        this.handleErrorMessages(result.status, data.error);
                     });
                 }
             })
             .catch((error) => {
-                //   if (error instanceof TypeError) {
-                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
-                //   } else {
-                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
-                //   }
+                this.emptyUserModelData();
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                }
             });
     }
 
@@ -162,23 +180,24 @@ class UserModel {
             .then((result) => {
                 if (result.ok) {
                     result.json().then((data) => {
-                        this.emptyUsersList();
+                        this.clearDeletionResult();
                         this.updateDeletionResult(data.success);
                         this.listUsers();
                     });
                 } else {
                     result.json().then((data) => {
                         this.clearDeletionResult();
-                        // this.handleErrorMessages(result.status, data.error);
+                        this.handleErrorMessages(result.status, data.error);
                     });
                 }
             })
             .catch((error) => {
-                //   if (error instanceof TypeError) {
-                //     this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
-                //   } else {
-                //     this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
-                //   }
+                this.emptyUserModelData();
+                if (error instanceof TypeError) {
+                    this.handleErrorMessages(503, 'There is no connection to the server or the server is unavailable.');
+                } else {
+                    this.handleErrorMessages(503, 'Something went wrong in the website or the service.');
+                }
             });
     }
 
@@ -247,13 +266,16 @@ class UserModel {
     }
 
     /**
-   * Reset the information about the logged in user.
+   * Reset all the information about the logged in user.
    */
     emptyUserModelData() {
         this.loginStatus = false;
         this.username = null;
+        this.registeredUsername = null;
         this.privilege = null;
         this.errorData = null;
+        this.usersList = null;
+        this.deletionResult = null;
         this.notifyObservers();
     }
 
@@ -285,6 +307,43 @@ class UserModel {
                 console.error("Callback error: ", err, callback);
             }
         });
+    }
+
+    /**
+    * Handle the errors that the website encounters.
+    * @param {number} status The status code related to the error.
+    * @param {string | {msg, param}} error The error that happened.
+    */
+    handleErrorMessages(status, error) {
+        if (typeof error === 'string') {
+            this.reportError(status, error);
+            return;
+        }
+
+        let message = '';
+
+        error.errors.forEach((err) => {
+            message = err.msg + ' for ' + err.param;
+            this.reportError(status, message);
+        });
+    }
+
+    /**
+    * Notify the observers for the error encountered during some operation and pass on the error information.
+    * @param {number} code The status code related to the error.
+    * @param {string} message The message explanting the error.
+    */
+    reportError(code, message) {
+        this.errorData = { code: code, message: message };
+        this.notifyObservers();
+    }
+
+    /**
+    * Reset the info about the error that was recently encountered.
+    */
+    emptyErrorData() {
+        this.errorData = null;
+        this.notifyObservers();
     }
 }
 
