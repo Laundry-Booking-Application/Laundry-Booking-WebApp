@@ -30,12 +30,26 @@ function BookingSchedule({ userModel, bookingModel, children }) {
                 }
                 if (userPrivilege === privileges.Standard) {
                     bookingModel.getResidentBookingSchedule(week);
-                }
-                bookingModel.selectBooking(date, room, range, username);
+                }   
             }
         },
-        [loginStatus, userPrivilege, week, bookingModel, date, room, range, username]
+        [loginStatus, userPrivilege, week, bookingModel]
     );
+
+    React.useEffect(() => {
+        bookingModel.emptySelectedBooking();
+        bookingModel.selectBooking(date, room, range, username);
+    }, [date, room, range, username]);
+
+
+    React.useEffect(() => {
+        bookingModel.emptySelectedBooking();
+        setWeek(0);
+        setDate('');
+        setRoom('');
+        setRange('');
+        setUsername('');
+    }, [bookedSlot, cancellationResult]);
 
     React.useEffect(() => {
         if (bookedSlot) {
@@ -50,7 +64,7 @@ function BookingSchedule({ userModel, bookingModel, children }) {
                 progress: undefined,
                 theme: "colored"
             });
-            bookingModel.clearBookedSlot();
+            bookingModel.emptyBookingSlot();
         }
 
         if (cancellationResult !== null) {
@@ -85,15 +99,11 @@ function BookingSchedule({ userModel, bookingModel, children }) {
         }
     }, [bookedSlot, cancellationResult]);
 
-    if (bookingSchedule === null) {
-        return React.createElement(WaitingDataView, {});
-    }
-
-   
-
-
-
     if (loginStatus) {
+        if (bookingSchedule === null) {
+            return React.createElement(WaitingDataView, {});
+        }
+
         if (userPrivilege === privileges.Administrator) {
             return React.createElement(BookingScheduleAdministratorView, {
                 weekDays: combineArrays(weekDayNames, bookingSchedule.weekDates),

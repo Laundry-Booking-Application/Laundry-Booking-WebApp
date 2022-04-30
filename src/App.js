@@ -21,7 +21,7 @@ const listUsersHref = "#usersList";
 function App({userModel, bookingModel}) {
   return (
     <div className='App'>
-      <Navigation userModel={userModel} homepageHref={homepageHref}>
+      <Navigation userModel={userModel} bookingModel={bookingModel} homepageHref={homepageHref}>
         <NavigationLogin userModel={userModel}/>
         <NavigationLogout userModel={userModel} goToHomePageHref={homepageHref} bookingScheduleHref={bookingScheduleHref}/>
         <NavigationOptions userModel={userModel} bookingModel={bookingModel} bookingScheduleHref={bookingScheduleHref}>
