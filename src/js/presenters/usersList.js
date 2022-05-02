@@ -3,21 +3,21 @@ import useModelProp from '../useModelProp';
 import privileges from '../privilegeEnum';
 import UnauthorizedAccessView from '../views/unauthorizedAccessView';
 import UsersListView from '../views/usersListView';
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 import WaitingDataView from '../views/waitingDataView';
 
 /**
  * The presenter for creating the users list.
- * @returns {UsersListView} UserListView The view that contains the users list page.
+ * @return {UsersListView} UserListView The view that contains the users list page.
  */
-function UsersList({ userModel }) {
-    const usersList = useModelProp(userModel, "usersList");
+function UsersList({userModel}) {
+    const usersList = useModelProp(userModel, 'usersList');
     const loginStatus = useModelProp(userModel, 'loginStatus');
     const userPrivilege = useModelProp(userModel, 'privilege');
     const deletionResult = useModelProp(userModel, 'deletionResult');
 
     React.useEffect(
-        function () {
+        function() {
             if (loginStatus) {
                 if (userPrivilege === privileges.Administrator) {
                     if (usersList === null) {
@@ -26,12 +26,12 @@ function UsersList({ userModel }) {
                 }
             }
         },
-        [userModel, loginStatus, userPrivilege, usersList]
+        [userModel, loginStatus, userPrivilege, usersList],
     );
 
     if (deletionResult !== null) {
         if (deletionResult === true) {
-            let cancellationMessage = `The user account has been successfully deleted!`;
+            const cancellationMessage = `The user account has been successfully deleted!`;
             toast.success(cancellationMessage, {
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: true,
@@ -40,12 +40,11 @@ function UsersList({ userModel }) {
                 pauseOnHover: true,
                 draggable: false,
                 progress: undefined,
-                theme: "colored"
+                theme: 'colored',
             });
             userModel.clearDeletionResult();
-        }
-        else {
-            let cancellationMessage = `An error has occurred while deleting the user account!`;
+        } else {
+            const cancellationMessage = `An error has occurred while deleting the user account!`;
             toast.error(cancellationMessage, {
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: true,
@@ -54,7 +53,7 @@ function UsersList({ userModel }) {
                 pauseOnHover: true,
                 draggable: false,
                 progress: undefined,
-                theme: "colored"
+                theme: 'colored',
             });
             userModel.clearDeletionResult();
         }
@@ -62,7 +61,6 @@ function UsersList({ userModel }) {
 
 
     if (loginStatus && userPrivilege === privileges.Administrator) {
-
         if (usersList === null) {
             return React.createElement(WaitingDataView, {});
         }
@@ -71,11 +69,9 @@ function UsersList({ userModel }) {
             usersList: [...usersList],
             deleteUser: (username) => deleteUserProxy(userModel, username),
         });
-    }
-    else {
+    } else {
         return React.createElement(UnauthorizedAccessView, {});
     }
-
 }
 
 /**
@@ -84,7 +80,7 @@ function UsersList({ userModel }) {
  * @param {string} username The username of the account to be deleted.
  */
 function deleteUserProxy(userModel, username) {
-    let confirmAction = window.confirm(`Are you sure you want to delete the account with the username: ${username} ?`);
+    const confirmAction = window.confirm(`Are you sure you want to delete the account with the username: ${username} ?`);
     if (confirmAction) {
         userModel.deleteUser(username);
     }

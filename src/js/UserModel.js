@@ -1,4 +1,4 @@
-import LaundryData from "./laundryData";
+import LaundryData from './laundryData';
 
 /**
  * Responsible for handling all the information about the user credentials.
@@ -30,9 +30,9 @@ class UserModel {
                 if (result.ok) {
                     result.json().then((data) => {
                         this.emptyUserModelData();
-                        let userLoggedIn = true;
-                        let currentUsername = data.success.username;
-                        let currentPrivilege = data.success.privilegeID;
+                        const userLoggedIn = true;
+                        const currentUsername = data.success.username;
+                        const currentPrivilege = data.success.privilegeID;
                         this.populateUserModelData(userLoggedIn, currentUsername, currentPrivilege);
                     });
                 } else {
@@ -67,7 +67,7 @@ class UserModel {
                 if (result.ok) {
                     result.json().then((data) => {
                         this.clearRegisteredUsername();
-                        let residentUsername = data.success.username;
+                        const residentUsername = data.success.username;
                         this.updateRegisteredUsername(residentUsername);
                         this.listUsers();
                     });
@@ -89,7 +89,7 @@ class UserModel {
     }
 
     /**
-   * log out the user from the website. 
+   * log out the user from the website.
    */
     logoutUser() {
         LaundryData.logoutUser().then((result) => {
@@ -123,13 +123,12 @@ class UserModel {
                 if (result.ok) {
                     result.json().then((data) => {
                         this.emptyUserModelData();
-                        let userLoginStatus = true;
-                        let currentUsername = data.success.username;
-                        let currentPrivilege = data.success.privilegeID;
+                        const userLoginStatus = true;
+                        const currentUsername = data.success.username;
+                        const currentPrivilege = data.success.privilegeID;
                         this.populateUserModelData(userLoginStatus, currentUsername, currentPrivilege);
                     });
-                }
-                else {
+                } else {
                     this.emptyUserModelData();
                 }
             })
@@ -289,22 +288,23 @@ class UserModel {
 
     /**
      * Removes the observer from the class.
-     * @param {Observer} obs The observer 
+     * @param {Observer} obs The observer
      */
     removeObserver(obs) {
-        this.subscribers = this.subscribers.filter(o => { return o !== obs; });
+        this.subscribers = this.subscribers.filter((o) => {
+            return o !== obs;
+        });
     }
 
     /**
      * Notifies the observers after any changes.
      */
     notifyObservers() {
-        this.subscribers.forEach(callback => {
+        this.subscribers.forEach((callback) => {
             try {
                 callback();
-            }
-            catch (err) {
-                console.error("Callback error: ", err, callback);
+            } catch (err) {
+                console.error('Callback error: ', err, callback);
             }
         });
     }
@@ -334,7 +334,7 @@ class UserModel {
     * @param {string} message The message explanting the error.
     */
     reportError(code, message) {
-        this.errorData = { code: code, message: message };
+        this.errorData = {code: code, message: message};
         this.notifyObservers();
     }
 

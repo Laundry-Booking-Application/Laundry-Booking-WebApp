@@ -1,16 +1,16 @@
-import React from "react";
-import useModelProp from "../useModelProp";
-import ShowBookedPassView from "../views/showBookedPassView"
+import React from 'react';
+import useModelProp from '../useModelProp';
+import ShowBookedPassView from '../views/showBookedPassView';
 
 /**
  * The presenter that is responsible upon creating a form (Modal) that contains information about the booked laundry pass.
  * @param {BookingModel} bookingModel The booking model that contains the necessary information about the booked laundry pass.
- * @returns {ShowBookedPassView} ShowBookedPassView The view that contains the booked laundry pass information form (Modal).
+ * @return {ShowBookedPassView} ShowBookedPassView The view that contains the booked laundry pass information form (Modal).
  */
-function ShowBookedPass({ bookingModel }) {
-    const bookedPassDate = useModelProp(bookingModel, "bookedPassDate");
-    const bookedPassRoomNumber = useModelProp(bookingModel, "bookedPassRoomNumber");
-    const bookedPassRange = useModelProp(bookingModel, "bookedPassRange");
+function ShowBookedPass({bookingModel}) {
+    const bookedPassDate = useModelProp(bookingModel, 'bookedPassDate');
+    const bookedPassRoomNumber = useModelProp(bookingModel, 'bookedPassRoomNumber');
+    const bookedPassRange = useModelProp(bookingModel, 'bookedPassRange');
     const [showBooked, setShowBooked] = React.useState(false);
     const [date, setDate] = React.useState('No booked pass');
     const [roomNumber, setRoomNumber] = React.useState('No booked pass');
@@ -24,15 +24,14 @@ function ShowBookedPass({ bookingModel }) {
             setPassRange('No booked pass');
             setCancelButtonDisabled(true);
             bookingModel.getBookedPass();
-        }
-        else if (bookedPassDate !== null) {
+        } else if (bookedPassDate !== null) {
             setDate(bookedPassDate);
             setRoomNumber(bookedPassRoomNumber);
             setPassRange(bookedPassRange);
             setCancelButtonDisabled(false);
         }
-    }, [bookingModel, bookedPassDate, bookedPassRoomNumber, bookedPassRange]
-    )
+    }, [bookingModel, bookedPassDate, bookedPassRoomNumber, bookedPassRange],
+    );
 
     return React.createElement(ShowBookedPassView, {
         date: date,
@@ -42,7 +41,7 @@ function ShowBookedPass({ bookingModel }) {
         cancelBookedPass: () => bookingModel.cancelBookedPass(bookedPassRoomNumber, bookedPassDate, bookedPassRange),
         show: showBooked,
         handleShow: () => setShowBooked(true),
-        handleClose: () => setShowBooked(false)
+        handleClose: () => setShowBooked(false),
     });
 }
 
