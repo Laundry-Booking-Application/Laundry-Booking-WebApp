@@ -453,6 +453,7 @@ class BookingModel {
     */
     handleErrorMessages(status, error) {
         if (typeof error === 'string') {
+            this.emptyErrorData();
             this.reportError(status, error);
             return;
         }
@@ -460,6 +461,7 @@ class BookingModel {
         let message = '';
 
         error.errors.forEach((err) => {
+            this.emptyErrorData();
             message = err.msg + ' for ' + err.param;
             this.reportError(status, message);
         });

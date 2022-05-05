@@ -1,5 +1,5 @@
 import React from 'react';
-import {createRoot} from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import UserModel from './js/UserModel';
@@ -9,6 +9,5 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const userModel = new UserModel();
 const bookingModel = new BookingModel();
 const container = document.getElementById('App');
-const root = createRoot(container);
 
-root.render(<App userModel={userModel} bookingModel={bookingModel}/>);
+ReactDOM.render(<App userModel={userModel} bookingModel={bookingModel}/>, container);
