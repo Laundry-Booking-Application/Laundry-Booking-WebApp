@@ -19,34 +19,35 @@ function Navigation({userModel, bookingModel, homepageHref, children}) {
     const errorDataBooking = useModelProp(bookingModel, 'errorData');
     const [toggleState, setToggleState] = React.useState(false);
 
+    React.useEffect(() => {
+        if (errorDataUser) {
+            toast.error(errorDataUser.message, {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+        }
+    }, [userModel, errorDataUser]);
 
-    if (errorDataUser) {
-        toast.error(errorDataUser.message, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'colored',
-        });
-        userModel.emptyErrorData();
-    }
-
-    if (errorDataBooking) {
-        toast.error(errorDataBooking.message, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'colored',
-        });
-        bookingModel.emptyErrorData();
-    }
+    React.useEffect(() => {
+        if (errorDataBooking) {
+            toast.error(errorDataBooking.message, {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+        }
+    }, [bookingModel, errorDataBooking]);
 
     if (loginStatus) {
         return React.createElement(NavigationView, {
