@@ -56,8 +56,10 @@ function App({ userModel, bookingModel }) {
 
       <CookieConsent
         style={{ background: "#212529" }}
+        overlay
       >
-        This website uses cookies to enable user authentication and authorization.</CookieConsent>
+        This website uses cookies to enable user authentication and authorization.
+      </CookieConsent>
     </div>
   );
 }
